@@ -164,8 +164,8 @@ function mooveLaser(){
             var birdSound = new Audio('boom.mp3');
             birdSound.loop = false;
             birdSound.play();
-            alert("destroyed ! ");
-            location.reload();
+            // alert("destroyed ! ");
+            // location.reload();
             //}
         }
         //console.log(laserM);
