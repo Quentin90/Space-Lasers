@@ -1,4 +1,5 @@
 //document.onkeydown = checkKey;
+
 var audio = new Audio('audio.mp3');
 audio.play();
 var cursorX,cursorY;
@@ -55,29 +56,6 @@ $(document).keydown(function(e) {
     }
 });
 
-// function checkKey(e) {
-//
-//     e = e || window.event;
-//
-//     if (e.keyCode == '38') {
-//         // up arrow
-//         ship.y-=1;
-//
-//     }
-//     else if (e.keyCode == '40') {
-//         // down arrow
-//         ship.y+=1;
-//     }
-//     else if (e.keyCode == '37') {
-//         // left arrow
-//         ship.x-=1;
-//     }
-//     else if (e.keyCode == '39') {
-//         // right arrow
-//         ship.x+=1;
-//     }
-//
-// }
 
 function init() {
 
@@ -121,7 +99,7 @@ function init() {
     ship.tilePosition.y = 0;
     ship.interactive = true;
     ship.mousemove = function(e){
-        ship.x=cursorX-460;
+        ship.x=cursorX-Math.floor(((screen.width-512)/2)+30);
         ship.y=cursorY-30;
     };
 
