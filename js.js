@@ -1,8 +1,10 @@
 //document.onkeydown = checkKey;
-
-var audio = new Audio('audio.mp3');
+var audio;
+var audio1,audio2;
+audio = new Audio('audio.mp3');
 audio.loop=true;
 audio.play();
+
 var cursorX,cursorY;
 var lasers=new Array();
 var map = {38: false, 40: false, 37: false,39:false};
@@ -77,7 +79,8 @@ function init() {
     far = new PIXI.extras.TilingSprite(farTexture, 512, 256);
     far.position.x = 0;
     far.position.y = 0;
-    far.tilePosition.x = 0;
+    far.tilePosition.x = 0;        stage.removeChild(audio2);
+
     far.tilePosition.y = 0;
 
     stage.addChild(far);
@@ -91,6 +94,90 @@ function init() {
     mid.tilePosition.y = 0;
     stage.addChild(mid);
 
+    var shipTexture = PIXI.Texture.fromImage("resources/play.png");
+    Bla = new PIXI.extras.TilingSprite(shipTexture, 100, 30);
+    Bla.position.x = 210;
+    Bla.position.y = 170;
+
+    Bla.interactive = true;
+    Bla.mousedown = function(e){
+        initShip();
+        gameLoop();
+        stage.removeChild(Bla);
+        if(audio1!=null){
+            stage.removeChild(audio1);
+
+        }else {
+            stage.removeChild(audio2);
+        }
+
+
+
+    };
+
+    stage.addChild(Bla);
+
+
+
+    var shipTexture = PIXI.Texture.fromImage("resources/sonOff.png");
+    audio2 = new PIXI.extras.TilingSprite(shipTexture, 40, 40);
+    audio2.position.x = 0;
+    audio2.position.y = 0;
+
+    audio2.interactive = true;
+    audio2.mousedown = function(e){
+        audioOff();
+
+
+    };
+
+    stage.addChild(audio2);
+    requestAnimationFrame(update);
+
+
+}
+function audioOn(){
+    audio = new Audio('audio.mp3');
+    audio.loop=true;
+    audio.play();
+
+    var shipTexture = PIXI.Texture.fromImage("resources/sonOff.png");
+    audio2 = new PIXI.extras.TilingSprite(shipTexture, 40, 40);
+    audio2.position.x = 0;
+    audio2.position.y = 0;
+
+    audio2.interactive = true;
+    audio2.mousedown = function(e){
+        audioOff();
+
+
+    };
+
+    stage.addChild(audio2);
+    stage.removeChild(audio1);
+}
+function audioOff(){
+    audio.src="";
+
+    var shipTexture = PIXI.Texture.fromImage("resources/sonOn.png");
+    audio1 = new PIXI.extras.TilingSprite(shipTexture, 40, 40);
+    audio1.position.x = 0;
+    audio1.position.y = 0;
+
+    audio1.interactive = true;
+    audio1.mousedown = function(e){
+        audioOn();
+
+
+    };
+
+    stage.addChild(audio1);
+    stage.removeChild(audio2);
+
+
+}
+
+function initShip() {
     var shipTexture = PIXI.Texture.fromImage("resources/ship.png");
     ship = new PIXI.extras.TilingSprite(shipTexture, 60, 45);
     ship.position.x = 0;
@@ -105,15 +192,7 @@ function init() {
 
     stage.addChild(ship);
 
-
-
-
-    gameLoop();
-    requestAnimationFrame(update);
-
-
 }
-
 function gameLoop(){
 
     //Loop this function 60 times per second
