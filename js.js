@@ -1,6 +1,7 @@
 //document.onkeydown = checkKey;
 
 var audio = new Audio('audio.mp3');
+audio.loop=true;
 audio.play();
 var cursorX,cursorY;
 var lasers=new Array();
@@ -159,15 +160,19 @@ function mooveLaser(){
         }
         if(laserM.position.x<ship.position.x+43 && laserM.position.x>ship.position.x+5  && laserM.position.y < ship.position.y+33 && laserM.position.y > ship.position.y+5) {
             //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
-            var birdSound = new Audio('boom.mp3');
-            birdSound.loop = false;
-            birdSound.play();
-            console.log("lol");
+            x=10;
             setTimeout(function(){
-                console.log("test");
+                //do what you need here
+                var birdSound = new Audio('boom.mp3');
+                birdSound.loop = false;
+                birdSound.play();
                 alert("destroyed ! ");
                 location.reload();
-            }, 10);
+                x+=2000;
+
+            }, x);
+
+
 
 
             //}
