@@ -67,7 +67,6 @@ function init() {
         {view:document.getElementById("game-canvas")}
     );
     renderer.view.onmousemove = function(e){
-        console.log(e.pageX,e.pageY);
         cursorX = e.pageX;
         cursorY = e.pageY;
     };
@@ -158,18 +157,19 @@ function mooveLaser(){
         }else {
             laserM.position.x -= laserM.speed;
         }
-        console.log(ship.position.x,ship.position.y);
         if(laserM.position.x<ship.position.x+43 && laserM.position.x>ship.position.x+5  && laserM.position.y < ship.position.y+33 && laserM.position.y > ship.position.y+5) {
             //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
             var birdSound = new Audio('boom.mp3');
             birdSound.loop = false;
             birdSound.play();
+            console.log("lol");
             setTimeout(function(){
-                console.log("pause");
-            }, 200);
+                console.log("test");
+                alert("destroyed ! ");
+                location.reload();
+            }, 10);
 
-            alert("destroyed ! ");
-            location.reload();
+
             //}
         }
         //console.log(laserM);

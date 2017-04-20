@@ -2,15 +2,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Parallax Scrolling Demo</title>
-    <script src="jquery-3.2.0.min.js"></script>
 
-    <script src="js.js" type="text/javascript" LANGUAGE="JavaScript"></script>
     <link rel="stylesheet" href="css.css" />
     <style>
         body { background-color: #000000; }
         canvas { background-color: #222222; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+
+    <script type="text/javascript">
+        [
+            'jquery-3.2.0.min.js',
+            'js.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js'
+        ].forEach(function(src) {
+            var script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            document.head.appendChild(script);
+        });
+    </script>
 </head>
 <body onload="init();">
 <div align="center">
