@@ -7,16 +7,21 @@ audio.play();
 var spawnRate=6;
 var cursorX,cursorY;
 var lasers=new Array();
+var actualMusic="audio.mp3";
+var basicText;
 
 var centi=0 // initialise les dixtièmes
 var secon=0 //initialise les secondes
 var minu=0 //initialise les minutes
 var vitesse=10;
+var idMusic=0;
+var listZic=new Array();
+listZic.push("audio.mp3","feel_good.mp3");
+
 
 
 function chrono(){
     centi++; //incrémentation des dixièmes de 1
-    console.log(centi,secon,minu);
     if (centi>9){centi=0;secon++} //si les dixièmes > 9,
     if (secon>59){secon=0;minu++} //si les secondes > 59,
     if(secon%17==0 && secon!=0 && centi==0){
@@ -136,12 +141,12 @@ function init() {
         gameLoop();
         chrono();
         stage.removeChild(Bla);
-        if(audio1!=null){
-            stage.removeChild(audio1);
+        stage.removeChild(audio1);
+        stage.removeChild(audio2);
+        stage.removeChild(choice);
+        stage.removeChild(basicText);
 
-        }else {
-            stage.removeChild(audio2);
-        }
+
 
 
 
@@ -149,6 +154,43 @@ function init() {
 
     stage.addChild(Bla);
 
+
+
+
+    var shipTexture = PIXI.Texture.fromImage("resources/choice.png");
+    choice = new PIXI.extras.TilingSprite(shipTexture, 160, 40);
+    choice.position.x = 40;
+    choice.position.y = 0;
+
+    choice.interactive = true;
+    choice.mousedown = function(e){
+        changeIdMusic();
+        playMusique();
+    };
+
+    stage.addChild(choice);
+
+
+    var style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 13,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fill: ['#ffffff', '#ffaa00'], // gradient
+        stroke: '#d10000',
+        strokeThickness: 5,
+        dropShadow: true,
+        dropShadowColor: '#000000',
+        dropShadowBlur: 4,
+        dropShadowAngle: Math.PI / 6,
+        dropShadowDistance: 6,
+        wordWrap: true,
+        wordWrapWidth: 440
+    });
+    basicText = new PIXI.Text(actualMusic, style);
+    basicText.x = 75;
+    basicText.y = 7;
+    stage.addChild(basicText);
 
 
     var shipTexture = PIXI.Texture.fromImage("resources/sonOff.png");
@@ -168,8 +210,47 @@ function init() {
 
 
 }
+
+function changeIdMusic(){
+    if(idMusic==0) {
+        idMusic = idMusic + 1
+    }
+    else{
+        idMusic=0;
+    }
+}
+function playMusique(){
+    var txt=listZic[idMusic];
+    console.log(txt);
+    actualMusic=txt;
+    stage.removeChild(basicText);
+    var style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 13,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fill: ['#ffffff', '#ffaa00'], // gradient
+        stroke: '#d10000',
+        strokeThickness: 5,
+        dropShadow: true,
+        dropShadowColor: '#000000',
+        dropShadowBlur: 4,
+        dropShadowAngle: Math.PI / 6,
+        dropShadowDistance: 6,
+        wordWrap: true,
+        wordWrapWidth: 440
+    });
+    basicText = new PIXI.Text(actualMusic, style);
+    basicText.x = 70;
+    basicText.y = 7;
+    stage.addChild(basicText);
+
+    audio.src=txt;
+    audio.loop=true;
+    audio.play();
+}
 function audioOn(){
-    audio = new Audio('audio.mp3');
+    audio = new Audio(actualMusic);
     audio.loop=true;
     audio.play();
 
@@ -187,6 +268,7 @@ function audioOn(){
 
     stage.addChild(audio2);
     stage.removeChild(audio1);
+
 }
 function audioOff(){
     audio.src="";
