@@ -4,9 +4,40 @@ var audio1,audio2;
 audio = new Audio('audio.mp3');
 audio.loop=true;
 audio.play();
-
+var spawnRate=6;
 var cursorX,cursorY;
 var lasers=new Array();
+
+var centi=0 // initialise les dixtièmes
+var secon=0 //initialise les secondes
+var minu=0 //initialise les minutes
+var vitesse=10;
+
+
+function chrono(){
+    centi++; //incrémentation des dixièmes de 1
+    console.log(centi,secon,minu);
+    if (centi>9){centi=0;secon++} //si les dixièmes > 9,
+    if (secon>59){secon=0;minu++} //si les secondes > 59,
+    if(secon%17==0 && secon!=0 && centi==0){
+        console.log("sppeeeeeeed UP !!");
+        speedUP();
+    }
+    if(secon%20==0 && secon!=0 && centi==0){
+        console.log("Density UP !!");
+        spawnRate=spawnRate+1;
+    }
+    compte=setTimeout('chrono()',100) //la fonction est relancée
+}
+
+function rasee() { //fonction qui remet les compteurs à 0
+    clearTimeout(compte) //arrête la fonction chrono()
+    centi = 0;
+    secon = 0;
+    minu = 0;
+
+}
+
 var map = {38: false, 40: false, 37: false,39:false};
 $(document).keydown(function(e) {
     if (e.keyCode in map) {
@@ -103,6 +134,7 @@ function init() {
     Bla.mousedown = function(e){
         initShip();
         gameLoop();
+        chrono();
         stage.removeChild(Bla);
         if(audio1!=null){
             stage.removeChild(audio1);
@@ -207,10 +239,14 @@ function gameLoop(){
     //Render the stage
     renderer.render(stage);
 }
+
+function speedUP(){
+    vitesse=vitesse+5;
+}
 function randomLaser(){
     var y=Math.random()*512;
     var x=Math.random()*100;
-    if(x<6) {
+    if(x<spawnRate) {
         //console.log("creer");
         var lasertex = PIXI.Texture.fromImage("resources/laser.png");
         laser = new PIXI.extras.TilingSprite(lasertex, 17, 5);
@@ -218,7 +254,7 @@ function randomLaser(){
         laser.position.y = y;
         laser.tilePosition.x = 499;
         laser.tilePosition.y = y;
-        laser.speed = Math.floor(Math.random() * 10) + 1;
+        laser.speed = Math.floor(Math.random() * vitesse) + 1;
         stage.addChild(laser);
         lasers.push(laser);
         //console.log(lasers)
