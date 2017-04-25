@@ -409,25 +409,30 @@ function mooveLaser(){
         }else {
             laserM.position.x -= laserM.speed;
         }
-        if(touchable) {
+
             if (laserM.position.x < ship.position.x + 43 && laserM.position.x > ship.position.x + 5 && laserM.position.y < ship.position.y + 33 && laserM.position.y > ship.position.y + 5) {
                 //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
-                x = 10;
-                setTimeout(function () {
-                    //do what you need here
-                    var birdSound = new Audio('boom.mp3');
-                    birdSound.loop = false;
-                    birdSound.play();
-                    alert("destroyed ! ");
-                    location.reload();
-                    x += 2000;
+                if(touchable) {
+                    x = 10;
+                    setTimeout(function () {
+                        //do what you need here
+                        var birdSound = new Audio('boom.mp3');
+                        birdSound.loop = false;
+                        birdSound.play();
+                        alert("destroyed ! ");
+                        location.reload();
+                        x += 2000;
 
-                }, x);
+                    }, x);
 
 
-                //}
+                    //}
+                }
+                else{
+                    stage.removeChild(laserM);
+                }
             }
-        }
+
         //console.log(laserM);
     }
 }
