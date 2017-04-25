@@ -7,9 +7,10 @@ audio.play();
 var spawnRate=6;
 var cursorX,cursorY;
 var lasers=new Array();
+var shields=new Array();
 var actualMusic="audio.mp3";
 var basicText;
-
+var touchable=true;
 var centi=0 // initialise les dixtièmes
 var secon=0 //initialise les secondes
 var minu=0 //initialise les minutes
@@ -313,6 +314,8 @@ function gameLoop(){
     requestAnimationFrame(gameLoop);
     randomLaser();
     mooveLaser();
+    randombuff();
+    mooveShield();
 
 
     //Move the cat 1 pixel per frame
@@ -324,6 +327,24 @@ function gameLoop(){
 
 function speedUP(){
     vitesse=vitesse+5;
+}
+function randombuff(){
+    var y=Math.random()*512;
+    var x=Math.random()*1000;
+    if(x<2) {
+        //console.log("creer");
+        var lasertex = PIXI.Texture.fromImage("resources/shield.png");
+        laser = new PIXI.extras.TilingSprite(lasertex, 8, 8);
+        laser.position.x = 499;
+        laser.position.y = y;
+        laser.tilePosition.x = 499;
+        laser.tilePosition.y = y;
+        laser.speed = Math.floor(Math.random() * vitesse) + 1;
+        stage.addChild(laser);
+        shields.push(laser);
+        console.log(shields);
+        //console.log(lasers)
+    }
 }
 function randomLaser(){
     var y=Math.random()*512;
@@ -346,6 +367,29 @@ function randomLaser(){
 
 
 }
+
+function mooveShield(){
+    for (var i = 0; i < shields.length; i++) {
+        var laserM=shields[i];
+        if(laserM.position.x<0){
+            shields.splice(i,1);
+            stage.removeChild(laserM)
+        }else {
+            laserM.position.x -= laserM.speed;
+        }
+        if(touchable) {
+            if (laserM.position.x < ship.position.x + 43 && laserM.position.x > ship.position.x + 5 && laserM.position.y < ship.position.y + 33 && laserM.position.y > ship.position.y + 5) {
+                //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
+                stage.removeChild(laserM);
+                untouchable();
+
+                //}
+            }
+        }
+        //console.log(laserM);
+    }
+}
+
 function mooveLaser(){
     for (var i = 0; i < lasers.length; i++) {
         var laserM=lasers[i];
@@ -355,27 +399,34 @@ function mooveLaser(){
         }else {
             laserM.position.x -= laserM.speed;
         }
-        if(laserM.position.x<ship.position.x+43 && laserM.position.x>ship.position.x+5  && laserM.position.y < ship.position.y+33 && laserM.position.y > ship.position.y+5) {
-            //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
-            x=10;
-            setTimeout(function(){
-                //do what you need here
-                var birdSound = new Audio('boom.mp3');
-                birdSound.loop = false;
-                birdSound.play();
-                alert("destroyed ! ");
-                location.reload();
-                x+=2000;
+        if(touchable) {
+            if (laserM.position.x < ship.position.x + 43 && laserM.position.x > ship.position.x + 5 && laserM.position.y < ship.position.y + 33 && laserM.position.y > ship.position.y + 5) {
+                //if (laserM.position.y < ship.position.y && laserM.position.y > ship.position.y-20) {
+                x = 10;
+                setTimeout(function () {
+                    //do what you need here
+                    var birdSound = new Audio('boom.mp3');
+                    birdSound.loop = false;
+                    birdSound.play();
+                    alert("destroyed ! ");
+                    location.reload();
+                    x += 2000;
 
-            }, x);
+                }, x);
 
 
-
-
-            //}
+                //}
+            }
         }
         //console.log(laserM);
     }
+}
+
+function untouchable(){
+    touchable=false;
+    setTimeout(function(){
+        touchable=true;
+    }, 4500);
 }
 
 function update() {
