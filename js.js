@@ -167,6 +167,7 @@ function init() {
     choice.mousedown = function(e){
         changeIdMusic();
         playMusique();
+        getData();
     };
 
     stage.addChild(choice);
@@ -388,6 +389,15 @@ function mooveShield(){
         }
         //console.log(laserM);
     }
+}
+
+function getData(){
+    var client = new XMLHttpRequest();
+    client.open('GET', 'Scores.txt');
+    client.onreadystatechange = function() {
+       console.log("tst");
+    }
+    client.send();
 }
 
 function mooveLaser(){
