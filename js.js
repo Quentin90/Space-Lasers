@@ -1,16 +1,26 @@
 //document.onkeydown = checkKey;
+
+// VARIABLES GLOBALES POUR L'AUDIO
 var audio;
 var audio1,audio2;
 audio = new Audio('audio.mp3');
 audio.loop=true;
 audio.play();
+
+
+//TAUX D'APPARITION DES LASERS
 var spawnRate=6;
+
+//ELEMENTS DU JEU, LISTE DES LASERS A L'ECRAN ET DES SHIELDS
 var cursorX,cursorY;
 var lasers=new Array();
 var shields=new Array();
 var actualMusic="audio.mp3";
 var basicText;
-var touchable=true;
+
+var touchable=true;//true si le ship peut etre touché par des lasers
+
+//CHRONO
 var centi=0 // initialise les dixtièmes
 var secon=0 //initialise les secondes
 var minu=0 //initialise les minutes
@@ -44,62 +54,9 @@ function rasee() { //fonction qui remet les compteurs à 0
 
 }
 
-var map = {38: false, 40: false, 37: false,39:false};
-$(document).keydown(function(e) {
-    if (e.keyCode in map) {
-        map[e.keyCode] = true;
-        if (map[38] && map[37]) {
-            // FIRE EVENT
-            ship.y-=1;
-            ship.x-=1;
-
-        }
-        if (map[38] && map[39]) {
-            // FIRE EVENT
-            ship.y-=1;
-            ship.x+=1;
-        }
-        if (map[40] && map[37]) {
-            // FIRE EVENT
-            ship.y+=1;
-            ship.x-=1;
-        }
-        if (map[40] && map[39]) {
-            // FIRE EVENT
-            ship.y+=1;
-            ship.x+=1;
-        }
-        if (map[40]) {
-            // FIRE EVENT
-            ship.y+=2;
-
-        }
-        if (map[37]) {
-            // FIRE EVENT
-            ship.x-=2;
-
-        }
-        if (map[39]) {
-            // FIRE EVENT
-            ship.x+=2;
-
-        }
-        if (map[38]) {
-            // FIRE E-ENT
-            ship.y-=2;
-
-        }
-    }
-}).keyup(function(e) {
-    if (e.keyCode in map) {
-        map[e.keyCode] = false;
-    }
-});
-
-
 function init() {
 
-
+    //CREER LE CANVAS DU JEU
     stage = new PIXI.Container();
     renderer = PIXI.autoDetectRenderer(
         512,
@@ -110,6 +67,8 @@ function init() {
         cursorX = e.pageX;
         cursorY = e.pageY;
     };
+
+    //AJOUTE LE BACKGROUND DU DESSUS
     var farTexture = PIXI.Texture.fromImage("resources/bg-far.png");
 
 
@@ -122,7 +81,7 @@ function init() {
 
     stage.addChild(far);
 
-
+    //AJOUTE LE BACKGROUND DU DESSOUS
     var midTexture = PIXI.Texture.fromImage("resources/bg-mid.png");
     mid = new PIXI.extras.TilingSprite(midTexture, 512, 256);
     mid.position.x = 0;
@@ -131,6 +90,7 @@ function init() {
     mid.tilePosition.y = 0;
     stage.addChild(mid);
 
+    //AJOUTE LE BOUTTON JOUER
     var shipTexture = PIXI.Texture.fromImage("resources/play.png");
     Bla = new PIXI.extras.TilingSprite(shipTexture, 100, 30);
     Bla.position.x = 210;
@@ -157,7 +117,7 @@ function init() {
 
 
 
-
+    //AJOUTE LE BOUTTON POUR CHANGER DE MUSIQUE
     var shipTexture = PIXI.Texture.fromImage("resources/choice.png");
     choice = new PIXI.extras.TilingSprite(shipTexture, 160, 40);
     choice.position.x = 40;
@@ -172,7 +132,7 @@ function init() {
 
     stage.addChild(choice);
 
-
+    //TEXTE DU BOUTON POUR LES ZIKS
     var style = new PIXI.TextStyle({
         fontFamily: 'Arial',
         fontSize: 13,
@@ -194,7 +154,7 @@ function init() {
     basicText.y = 7;
     stage.addChild(basicText);
 
-
+    //ACTIVER DESACTIVER LA MUSIQUE
     var shipTexture = PIXI.Texture.fromImage("resources/sonOff.png");
     audio2 = new PIXI.extras.TilingSprite(shipTexture, 40, 40);
     audio2.position.x = 0;
@@ -292,7 +252,7 @@ function audioOff(){
 
 
 }
-
+//CREER ET AFFICHE LE VAISSEAU
 function initShip() {
     var shipTexture = PIXI.Texture.fromImage("resources/ship.png");
     ship = new PIXI.extras.TilingSprite(shipTexture, 60, 45);
@@ -313,10 +273,10 @@ function gameLoop(){
 
     //Loop this function 60 times per second
     requestAnimationFrame(gameLoop);
-    randomLaser();
-    mooveLaser();
-    randombuff();
-    mooveShield();
+    randomLaser(); // CREER LASER
+    mooveLaser(); // BOUGE LASER
+    randombuff(); // CREER SHIELDS
+    mooveShield(); // BOUGE SHIELDS
 
 
     //Move the cat 1 pixel per frame
@@ -327,7 +287,7 @@ function gameLoop(){
 }
 
 function speedUP(){
-    vitesse=vitesse+5;
+    vitesse=vitesse+5; // AUGMENTE LA VITESSE DU JEU
 }
 function randombuff(){
     var y=Math.random()*512;
@@ -437,6 +397,7 @@ function mooveLaser(){
     }
 }
 
+//RENDS LE VAISSEAU INTOUCHABLE PAR LES LASERS
 function untouchable(){
     touchable=false;
     setTimeout(function(){
@@ -444,6 +405,8 @@ function untouchable(){
     }, 4500);
 }
 
+
+//FAIT BOUGER LES BACKGROUNDS
 function update() {
     far.tilePosition.x -= 0.128;
     mid.tilePosition.x -= 0.64;
@@ -452,7 +415,7 @@ function update() {
     requestAnimationFrame(update);
 }
 
-
+//je sais plus a quoi ça sert mais je touche pas mdrrr
 function keyboard(keyCode) {
     var key = {};
     key.code = keyCode;
