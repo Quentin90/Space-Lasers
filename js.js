@@ -14,6 +14,7 @@ var spawnRate=6;
 //ELEMENTS DU JEU, LISTE DES LASERS A L'ECRAN ET DES SHIELDS
 var cursorX,cursorY;
 var lasers=new Array();
+var lasers_ally=new Array();
 var shields=new Array();
 var actualMusic="audio.mp3";
 var basicText;
@@ -114,6 +115,8 @@ function init() {
     };
 
     stage.addChild(Bla);
+
+
 
 
 
@@ -261,12 +264,33 @@ function initShip() {
     ship.tilePosition.x = 0;
     ship.tilePosition.y = 0;
     ship.interactive = true;
+    ship.click = function (e) {
+        FireLaser();
+
+    }
     ship.mousemove = function(e){
         ship.x=cursorX-Math.floor(((screen.width-512)/2)+30);
         ship.y=cursorY-30;
     };
 
+
     stage.addChild(ship);
+
+}
+function FireLaser(){
+    //console.log("creer");
+    var lasertex = PIXI.Texture.fromImage("resources/laser.png");
+    laser = new PIXI.extras.TilingSprite(lasertex, 17, 5);
+    laser.position.x = ship.x;
+    laser.position.y = ship.y+22;
+    laser.tilePosition.x = ship.x;
+    laser.tilePosition.y = ship.y+22;
+    laser.speed = 5;
+    stage.addChild(laser);
+    lasers_ally.push(laser);
+    //console.log(lasers)
+
+
 
 }
 function gameLoop(){
@@ -274,9 +298,11 @@ function gameLoop(){
     //Loop this function 60 times per second
     requestAnimationFrame(gameLoop);
     randomLaser(); // CREER LASER
+    randomMonster();
     mooveLaser(); // BOUGE LASER
     randombuff(); // CREER SHIELDS
     mooveShield(); // BOUGE SHIELDS
+    mooveLaserAlly();
 
 
     //Move the cat 1 pixel per frame
@@ -307,13 +333,34 @@ function randombuff(){
         //console.log(lasers)
     }
 }
+
+function randomMonster(){
+    var y=Math.random()*512;
+    var x=Math.random()*1000;
+    if(x<2) {
+        //console.log("creer");
+        var lasertex = PIXI.Texture.fromImage("resources/ship3.png");
+        laser = new PIXI.extras.TilingSprite(lasertex, 40, 40);
+        laser.position.x = 499;
+        laser.position.y = y;
+        laser.tilePosition.x = 499;
+        laser.tilePosition.y = y;
+        laser.speed = Math.floor(Math.random() * vitesse) + 1;
+        stage.addChild(laser);
+        shields.push(laser);
+        console.log(shields);
+        //console.log(lasers)
+    }
+}
+
+
 function randomLaser(){
     var y=Math.random()*512;
     var x=Math.random()*100;
     if(x<spawnRate) {
         //console.log("creer");
         var lasertex = PIXI.Texture.fromImage("resources/laser.png");
-        laser = new PIXI.extras.TilingSprite(lasertex, 17, 5);
+        laser = new PIXI.extras.TilingSprite(lasertex,17, 5);
         laser.position.x = 499;
         laser.position.y = y;
         laser.tilePosition.x = 499;
@@ -397,6 +444,19 @@ function mooveLaser(){
     }
 }
 
+function mooveLaserAlly(){
+    for (var i = 0; i < lasers_ally.length; i++) {
+        var laserM=lasers_ally[i];
+        if(laserM.position.x>512){
+            lasers_ally.splice(i,1);
+            stage.removeChild(laserM)
+        }else {
+            laserM.position.x += laserM.speed;
+        }
+
+
+    }
+}
 //RENDS LE VAISSEAU INTOUCHABLE PAR LES LASERS
 function untouchable(){
     touchable=false;
